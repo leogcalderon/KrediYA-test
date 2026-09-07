@@ -1,0 +1,37 @@
+1. Contenerización
+
+* Crear una aplicación sencilla (Hello World o equivalente).
+* Generar un Dockerfile funcional.
+* Incluir instrucciones para construir y ejecutar la imagen localmente.
+
+docker build -t test-app:latest .
+
+docker run test-app:latest
+
+
+2. Infraestructura como Código
+
+* Crear la definición de infraestructura utilizando Terraform (o herramienta equivalente).
+* No es necesario ejecutar ni aprovisionar recursos reales.
+* El código debe reflejar cómo se desplegará la solución en GCP.
+
+
+3. Pipeline de Integración y Despliegue
+
+* Crear un pipeline CI/CD utilizando GitHub Actions, GitLab CI o herramienta similar.
+* El pipeline deberá contemplar:
+
+  * Validación del código.
+  * Construcción de la imagen Docker.
+  * Publicación de la imagen en un registro de contenedores.
+  * Despliegue de la aplicación.
+
+
+4. Documentación del Despliegue
+
+Incluir en el README:
+
+* Arquitectura propuesta.
+* Servicios de GCP que utilizarías.
+* Justificación de la solución.
+* Comandos necesarios para realizar el despliegue.

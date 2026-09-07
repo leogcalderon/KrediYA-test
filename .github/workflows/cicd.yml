@@ -1,0 +1,41 @@
+name: cicd
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  name:
+    runs-on: ubuntu-latest
+    env:
+      COMMIT_HASH: ${{ github.sha }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Test code
+        run: |
+          pytest tests/test_hello.py
+
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Build and Push docker image
+        uses: google-github-actions/setup-gcloud@v1
+        run:
+          gcloud auth configure-docker {{ env.GCP_REGION }}-docker.pkg.dev
+          docker build -t {{ env.GCP_REGION }}-docker.pkg.dev/{{ env.PROJECT_ID }}/{{ env.REPO_NAME }}/hello:{{ env.COMMIT_HASH }} .
+          docker push {{ env.GCP_REGION }}-docker.pkg.dev/{{ env.PROJECT_ID }}/{{ env.REPO_NAME }}/hello:{{ env.COMMIT_HASH }}
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform
+        run: |
+          terraform init
+          terraform plan
+          terraform apply -auto-approve -var="commit_hash=$COMMIT_HASH"
