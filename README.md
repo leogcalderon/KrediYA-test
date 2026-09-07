@@ -1,10 +1,11 @@
 CI/CD pipeline architecture:
-- GitHub actions workflows to execute:
-  - PyTest execution
-  - Build + Push Docker image into GCP Artifact Registry
-  - Terraform to manage GCP assets
+- GitHub actions workflows que ejecuta:
+  - PyTest tests para validar el codigo python
+  - Build + Push Docker de la imagen a GCP Artifact Registry
+  - Terraform para administrar los servicios usados en GCP
+  - Uso de secretos para autenticar a GCP o almacenar secretos
 
-- Terraform: usando GCS como backend para tener un estado persistente en la nube
+- Terraform: usando GCS como backend para tener un estado persistente en la nube, tfvars por entorno
 - GCP:
   - Artifact registry: para alojar las imagenes Docker
   - Cloud Run Service: para deployar el codigo python (service cuando se necesita una API, jobs puntual)
